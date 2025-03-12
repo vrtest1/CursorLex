@@ -14,12 +14,12 @@ def get_text_from_clipboard():
 
 def get_word_meaning(word):
     try:
-        url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
+        url = f"https://jisho.org/api/v1/search/words?keyword={word}"
         response = requests.get(url)
         
         if response.status_code == 200:
             data = response.json()
-            return data[0]['meanings'][0]['definitions'][0]['definition']
+            return data['data'][0]['senses'][0]['english_definitions'][0]
         return f"Error: {response.status_code} - {response.text}"
     except (KeyError, IndexError):
         return "解析エラー：データ構造が異なります"
