@@ -16,14 +16,25 @@ def get_text_from_clipboard():
 def get_word_meaning(word):
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
     response = requests.get(url)
-# Label to display the result
-result_label = tk.Label(root, text='')
-result_label.pack(pady=10)
-
     if response.status_code == 200:
         data = response.json()
         meanings = data[0]['meanings'][0]['definitions'][0]['definition']
         return meanings
+    else:
+        return "Meaning not found."
+
+# Create the main application window
+root = tk.Tk()
+root.title('CursorLex')
+root.geometry('300x200')
+
+# Add a button to get text from clipboard
+button = tk.Button(root, text='Get Text from Clipboard', command=get_text_from_clipboard)
+button.pack(pady=20)
+
+# Label to display the result
+result_label = tk.Label(root, text='')
+result_label.pack(pady=10)
     else:
         return "Meaning not found."
 
