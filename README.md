@@ -1,5 +1,39 @@
 # CursorLex
 
+CursorLexは、カーソルを単語に当てると日本語や英語の単語の意味を表示するWindowsアプリケーションです。
+
+## 機能
+- OCRを使用してカーソル下のテキストを認識
+- オンライン辞書APIから単語の意味を取得
+- ポップアップウィンドウで意味を表示
+
+## セットアップ
+
+1. リポジトリをクローン:
+   ```bash
+   git clone https://github.com/vrtest1/CursorLex.git
+   cd CursorLex
+   ```
+
+2. 必要なパッケージをインストール:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. アプリケーションを実行:
+   ```bash
+   python main.py
+   ```
+
+## 必要条件
+- Python 3.x
+- Tesseract OCR
+
+## ライセンス
+このプロジェクトはMITライセンスの下でライセンスされています。
+
+---
+
 CursorLex is a Windows application that displays the meaning of Japanese and English words when you hover over them with your cursor.
 
 ## Features
