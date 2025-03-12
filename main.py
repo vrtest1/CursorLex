@@ -19,8 +19,8 @@ def get_word_meaning(word):
         
         if response.status_code == 200:
             data = response.json()
-            print("API Response:", data)  # デバッグ用にレスポンスを出力
-            return data['data'][0]['senses'][0]['english_definitions'][0]
+            japanese_definitions = data['data'][0]['senses'][0]['japanese']
+            return ', '.join([f"{item['word']} ({item['reading']})" for item in japanese_definitions])
         return f"Error: {response.status_code} - {response.text}"
     except (KeyError, IndexError):
         return "解析エラー：データ構造が異なります"
