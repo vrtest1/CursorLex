@@ -19,6 +19,7 @@ def get_word_meaning(word):
         
         if response.status_code == 200:
             data = response.json()
+            print("API Response:", data)  # デバッグ用にレスポンスを出力
             return data['data'][0]['senses'][0]['english_definitions'][0]
         return f"Error: {response.status_code} - {response.text}"
     except (KeyError, IndexError):
