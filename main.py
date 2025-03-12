@@ -3,7 +3,6 @@ import pyperclip
 import requests
 
 # Function to get text from clipboard, fetch meaning from API, and display it
-
 def get_text_from_clipboard():
     text = pyperclip.paste()
     print(f"Received text: {text}")
