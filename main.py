@@ -38,8 +38,7 @@ result_label = tk.Label(root, text='', wraplength=250)
 result_label.pack(pady=10)
 
 root.mainloop()
-    else:
-        return "Meaning not found."
+
 
 # Create the main application window
 root = tk.Tk()
