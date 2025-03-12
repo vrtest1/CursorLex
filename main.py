@@ -45,15 +45,3 @@ result_label.pack(pady=10)
 
 root.mainloop()
 
-
-# Create the main application window
-root = tk.Tk()
-root.title('CursorLex')
-root.geometry('300x200')
-
-# Add a button to get text from clipboard
-button = tk.Button(root, text='Get Text from Clipboard', command=get_text_from_clipboard)
-button.pack(pady=20)
-
-# Run the application
-root.mainloop()
