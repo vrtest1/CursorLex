@@ -19,8 +19,13 @@ def get_word_meaning(word):
         
         if response.status_code == 200:
             data = response.json()
-            japanese_definitions = data['data'][0]['senses'][0]['japanese']
-            return ', '.join([f"{item['word']} ({item['reading']})" for item in japanese_definitions])
+            if data['data']:
+                senses = data['data'][0]['senses']
+                if senses:
+                    japanese_definitions = senses[0].get('japanese', [])
+                    if japanese_definitions:
+                        return ', '.join([f"{item.get('word', '')} ({item.get('reading', '')})" for item in japanese_definitions])
+            return "意味が見つかりませんでした。"
         return f"Error: {response.status_code} - {response.text}"
     except (KeyError, IndexError):
         return "解析エラー：データ構造が異なります"
