@@ -90,10 +90,28 @@ def get_word_meaning(word):
                         elif 'japanese_definitions' not in sense and 'english_definitions' in sense:
                             # 一般的な日本語訳を提供
                             translations = {
-                                'to ': 'する、',  # 動詞の基本形
-                                'the ': '',      # 冠詞は省略
-                                'a ': '',        # 冠詞は省略
-                                'an ': '',       # 冠詞は省略
+                                # 楽器
+                                'shamisen': '三味線',
+                                'koto': '琴',
+                                'taiko': '太鼓',
+                                'shakuhachi': '尺八',
+                                'biwa': '琵琶',
+                                # 動物
+                                'cat': '猫',
+                                'dog': '犬',
+                                'bird': '鳥',
+                                'fish': '魚',
+                                # 一般的な単語
+                                'japan': '日本',
+                                'japanese': '日本の、日本語の',
+                                'tokyo': '東京',
+                                'kyoto': '京都',
+                                'osaka': '大阪',
+                                # 動詞の基本形と冠詞
+                                'to ': 'する、',
+                                'the ': '',
+                                'a ': '',
+                                'an ': '',
                             }
                             jp_meaning = eng_defs.lower()
                             for eng, jp in translations.items():
