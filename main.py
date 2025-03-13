@@ -43,7 +43,9 @@ def get_word_meaning(word):
                 
                 # 日本語の意味を取得
                 if word_data.get('senses'):
-                    japanese_defs = []
+                    primary_defs = []    # 主要な意味
+                    secondary_defs = []  # 派生的/歴史的な意味
+                    
                     for sense in word_data['senses']:
                         # 品詞情報の取得
                         if 'parts_of_speech' in sense:
@@ -53,6 +55,17 @@ def get_word_meaning(word):
                         
                         # 英語の意味
                         eng_defs = ', '.join(sense['english_definitions'])
+                        
+                        # タグと情報の確認
+                        is_primary = True
+                        if 'tags' in sense:
+                            historical_tags = ['historical term', 'archaic', 'obsolete', 'dated term']
+                            if any(tag in sense['tags'] for tag in historical_tags):
+                                is_primary = False
+                        
+                        # 特定の派生的な意味を検出
+                        if 'info' in sense:
+                            is_primary = False
                         
                         # 日本語の意味（日本語訳の辞書）
                         jp_translations = {
@@ -118,10 +131,40 @@ def get_word_meaning(word):
                                 jp_meaning = jp_meaning.replace(eng, jp)
                             entry += f"\n→ {jp_meaning}"
                         
-                        japanese_defs.append(entry)
-                        if len(japanese_defs) >= 2:  # 最大2つの意味まで
+                        # エントリーの作成
+                        entry = f"{jp_pos}{eng_defs}"
+                        if 'japanese_definitions' in sense:
+                            jp_meaning = ', '.join(sense['japanese_definitions'])
+                            entry += f"\n→ {jp_meaning}"
+                        elif 'japanese_definitions' not in sense and 'english_definitions' in sense:
+                            jp_meaning = eng_defs.lower()
+                            for eng, jp in translations.items():
+                                jp_meaning = jp_meaning.replace(eng, jp)
+                            entry += f"\n→ {jp_meaning}"
+                        
+                        # 歴史的/派生的な意味の場合は注釈を追加
+                        if not is_primary and 'info' in sense:
+                            entry += f"\n※ {sense['info'][0]}"
+                        
+                        # 主要な意味か派生的な意味かに分類
+                        if is_primary:
+                            primary_defs.append(entry)
+                        else:
+                            secondary_defs.append(entry)
+                        
+                        # 主要な意味は最大2つまで
+                        if len(primary_defs) >= 2:
                             break
-                    result['japanese'] = '\n\n'.join(japanese_defs)
+                    
+                    # 結果の組み立て
+                    all_defs = []
+                    if primary_defs:
+                        all_defs.extend(primary_defs)
+                    if secondary_defs:
+                        all_defs.append("\n【派生的・歴史的な意味】")
+                        all_defs.extend(secondary_defs[:1])  # 派生的な意味は1つまで
+                    
+                    result['japanese'] = '\n\n'.join(all_defs)
                 
                 return result
             return {"error": "意味が見つかりませんでした。"}
