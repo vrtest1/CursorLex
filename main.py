@@ -43,9 +43,7 @@ def get_word_meaning(word):
                 
                 # 日本語の意味を取得
                 if word_data.get('senses'):
-                    primary_defs = []    # 主要な意味
-                    secondary_defs = []  # 派生的/歴史的な意味
-                    
+                    japanese_defs = []
                     for sense in word_data['senses']:
                         # 品詞情報の取得
                         if 'parts_of_speech' in sense:
@@ -55,17 +53,6 @@ def get_word_meaning(word):
                         
                         # 英語の意味
                         eng_defs = ', '.join(sense['english_definitions'])
-                        
-                        # タグと情報の確認
-                        is_primary = True
-                        if 'tags' in sense:
-                            historical_tags = ['historical term', 'archaic', 'obsolete', 'dated term']
-                            if any(tag in sense['tags'] for tag in historical_tags):
-                                is_primary = False
-                        
-                        # 特定の派生的な意味を検出
-                        if 'info' in sense:
-                            is_primary = False
                         
                         # 日本語の意味（日本語訳の辞書）
                         jp_translations = {
@@ -103,57 +90,20 @@ def get_word_meaning(word):
                         elif 'japanese_definitions' not in sense and 'english_definitions' in sense:
                             # 一般的な日本語訳を提供
                             translations = {
-                                # 楽器
-                                'shamisen': '三味線',
-                                'koto': '琴',
-                                'taiko': '太鼓',
-                                'shakuhachi': '尺八',
-                                'biwa': '琵琶',
-                                # 動物
-                                'cat': '猫',
-                                'dog': '犬',
-                                'bird': '鳥',
-                                'fish': '魚',
-                                # 一般的な単語
-                                'japan': '日本',
-                                'japanese': '日本の、日本語の',
-                                'tokyo': '東京',
-                                'kyoto': '京都',
-                                'osaka': '大阪',
-                                # 動詞の基本形と冠詞
-                                'to ': 'する、',
-                                'the ': '',
-                                'a ': '',
-                                'an ': '',
+                                'to ': 'する、',  # 動詞の基本形
+                                'the ': '',      # 冠詞は省略
+                                'a ': '',        # 冠詞は省略
+                                'an ': '',       # 冠詞は省略
                             }
                             jp_meaning = eng_defs.lower()
                             for eng, jp in translations.items():
                                 jp_meaning = jp_meaning.replace(eng, jp)
                             entry += f"\n→ {jp_meaning}"
                         
-                        # 歴史的/派生的な意味の場合は注釈を追加
-                        if not is_primary and 'info' in sense:
-                            entry += f"\n※ {sense['info'][0]}"
-                        
-                        # 主要な意味か派生的な意味かに分類
-                        if is_primary:
-                            primary_defs.append(entry)
-                        else:
-                            secondary_defs.append(entry)
-                        
-                        # 主要な意味は最大2つまで
-                        if len(primary_defs) >= 2:
+                        japanese_defs.append(entry)
+                        if len(japanese_defs) >= 2:  # 最大2つの意味まで
                             break
-                    
-                    # 結果の組み立て
-                    all_defs = []
-                    if primary_defs:
-                        all_defs.extend(primary_defs)
-                    if secondary_defs:
-                        all_defs.append("\n【派生的・歴史的な意味】")
-                        all_defs.extend(secondary_defs[:1])  # 派生的な意味は1つまで
-                    
-                    result['japanese'] = '\n\n'.join(all_defs)
+                    result['japanese'] = '\n\n'.join(japanese_defs)
                 
                 return result
             return {"error": "意味が見つかりませんでした。"}
@@ -175,4 +125,3 @@ result_label = tk.Label(root, text='ここに結果が表示されます', wrapl
 result_label.pack(pady=10, padx=20)
 
 root.mainloop()
-
