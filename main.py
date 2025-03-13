@@ -131,17 +131,6 @@ def get_word_meaning(word):
                                 jp_meaning = jp_meaning.replace(eng, jp)
                             entry += f"\n→ {jp_meaning}"
                         
-                        # エントリーの作成
-                        entry = f"{jp_pos}{eng_defs}"
-                        if 'japanese_definitions' in sense:
-                            jp_meaning = ', '.join(sense['japanese_definitions'])
-                            entry += f"\n→ {jp_meaning}"
-                        elif 'japanese_definitions' not in sense and 'english_definitions' in sense:
-                            jp_meaning = eng_defs.lower()
-                            for eng, jp in translations.items():
-                                jp_meaning = jp_meaning.replace(eng, jp)
-                            entry += f"\n→ {jp_meaning}"
-                        
                         # 歴史的/派生的な意味の場合は注釈を追加
                         if not is_primary and 'info' in sense:
                             entry += f"\n※ {sense['info'][0]}"
