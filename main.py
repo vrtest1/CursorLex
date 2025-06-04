@@ -22,8 +22,9 @@ def get_text_from_clipboard():
 
 def get_word_meaning(word):
     try:
-        url = f"https://jisho.org/api/v1/search/words?keyword={word}"
-        response = requests.get(url)
+        url = "https://jisho.org/api/v1/search/words"
+        # use params so the query is properly encoded
+        response = requests.get(url, params={"keyword": word}, timeout=5)
         
         if response.status_code == 200:
             data = response.json()
@@ -113,15 +114,16 @@ def get_word_meaning(word):
     except Exception as e:
         return {"error": f"予期せぬエラー: {str(e)}"}
 
-# GUI設定
-root = tk.Tk()
-root.title('CursorLex')
-root.geometry('400x500')
+if __name__ == "__main__":
+    # GUI設定
+    root = tk.Tk()
+    root.title('CursorLex')
+    root.geometry('400x500')
 
-button = tk.Button(root, text='クリップボードから取得', command=get_text_from_clipboard)
-button.pack(pady=20)
+    button = tk.Button(root, text='クリップボードから取得', command=get_text_from_clipboard)
+    button.pack(pady=20)
 
-result_label = tk.Label(root, text='ここに結果が表示されます', wraplength=350, justify='left')
-result_label.pack(pady=10, padx=20)
+    result_label = tk.Label(root, text='ここに結果が表示されます', wraplength=350, justify='left')
+    result_label.pack(pady=10, padx=20)
 
-root.mainloop()
+    root.mainloop()
